@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- full-bleed paper background so it works as a "maskable" icon too -->
+  <rect width="512" height="512" fill="#fff7ec"/>
+  <g fill="#f1dfc8">
+    <circle cx="64" cy="64" r="7"/><circle cx="448" cy="64" r="7"/><circle cx="64" cy="448" r="7"/><circle cx="448" cy="448" r="7"/>
+  </g>
+  <!-- the calendar, kept inside the central safe zone -->
+  <g stroke="#33293d" stroke-linejoin="round">
+    <rect x="148" y="160" width="232" height="218" rx="30" fill="#33293d" stroke-width="14"/>
+    <rect x="136" y="148" width="232" height="218" rx="30" fill="#fffdf9" stroke-width="14"/>
+    <path d="M136 178a30 30 0 0 1 30-30h172a30 30 0 0 1 30 30v40H136z" fill="#e6a1d8" stroke-width="14"/>
+    <path d="M252 330s-50-29-50-61a26 26 0 0 1 50-10 26 26 0 0 1 50 10c0 32-50 61-50 61z" fill="#ff8fab" stroke-width="12"/>
+  </g>
+  <g fill="none" stroke-linecap="round">
+    <g stroke="#33293d" stroke-width="16">
+      <path d="M186 168a20 26 0 1 1 18-14"/><path d="M252 168a20 26 0 1 1 18-14"/><path d="M318 168a20 26 0 1 1 18-14"/>
+    </g>
+    <g stroke="#ece6f4" stroke-width="6">
+      <path d="M186 168a20 26 0 1 1 18-14"/><path d="M252 168a20 26 0 1 1 18-14"/><path d="M318 168a20 26 0 1 1 18-14"/>
+    </g>
+  </g>
+  <g fill="#33293d"><circle cx="186" cy="170" r="9"/><circle cx="252" cy="170" r="9"/><circle cx="318" cy="170" r="9"/></g>
+</svg>

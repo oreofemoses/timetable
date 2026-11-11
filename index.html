@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Vida's Timetable</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <!-- home screen: Android / Chrome read the manifest; iPhone reads the apple-* tags -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#fff7ec" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Timetable" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <!-- the two cute fonts live in fonts/ so the app works offline -->
+  <link rel="preload" href="fonts/fredoka-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/gaegu-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- background doodles -->
+  <div class="doodles" aria-hidden="true">
+    <svg class="dd dd-1" viewBox="0 0 40 40"><path d="M20 4l4.5 10.5L36 16l-8.5 7.5L30 35l-10-6-10 6 2.5-11.5L4 16l11.5-1.5z" /></svg>
+    <svg class="dd dd-2" viewBox="0 0 40 40"><path d="M20 34S5 25 5 15a7.5 7.5 0 0 1 15-2 7.5 7.5 0 0 1 15 2c0 10-15 19-15 19z" /></svg>
+    <svg class="dd dd-3" viewBox="0 0 40 40"><path d="M20 3v34M3 20h34M8 8l24 24M32 8L8 32" /></svg>
+    <svg class="dd dd-4" viewBox="0 0 60 30"><path d="M3 20c6-12 12-12 18 0s12 12 18 0 12-12 18 0" /></svg>
+    <svg class="dd dd-5" viewBox="0 0 40 40"><path d="M20 34S5 25 5 15a7.5 7.5 0 0 1 15-2 7.5 7.5 0 0 1 15 2c0 10-15 19-15 19z" /></svg>
+    <svg class="dd dd-6" viewBox="0 0 40 40"><path d="M20 4l4.5 10.5L36 16l-8.5 7.5L30 35l-10-6-10 6 2.5-11.5L4 16l11.5-1.5z" /></svg>
+    <svg class="dd dd-7" viewBox="0 0 40 40"><circle cx="20" cy="20" r="12" /></svg>
+  </div>
+
+  <button type="button" class="settings-btn" aria-label="Settings and backup" aria-haspopup="dialog">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8z"/><path d="M10.3 3.5h3.4l.5 2.3 1.6.9 2.2-.8 1.7 2.9-1.7 1.6v1.9l1.7 1.6-1.7 2.9-2.2-.8-1.6.9-.5 2.3h-3.4l-.5-2.3-1.6-.9-2.2.8-1.7-2.9 1.7-1.6v-1.9L4.3 8.8 6 5.9l2.2.8 1.6-.9z"/></svg>
+  </button>
+
+  <header class="title">
+    <h1>Vida's Timetable</h1>
+    <svg class="squiggle" viewBox="0 0 220 16" aria-hidden="true"><path d="M4 10c18-8 30 6 48 0s30-8 48 0 30 6 48 0 30-8 48 0 12 4 20 2" /></svg>
+  </header>
+
+  <main class="desk">
+    <!-- feature icons (placeholders for now) -->
+    <button class="feature f-classes" data-feature="Schedule" aria-haspopup="dialog">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <rect x="22" y="14" width="60" height="74" rx="8" class="fill-sky" />
+        <rect x="22" y="14" width="14" height="74" rx="6" class="fill-lav" />
+        <path d="M46 34h26M46 46h26M46 58h18" class="line" />
+        <g class="spiral"><circle cx="22" cy="26" r="5" /><circle cx="22" cy="42" r="5" /><circle cx="22" cy="58" r="5" /><circle cx="22" cy="74" r="5" /></g>
+      </svg>
+      <span class="lbl">Schedule</span>
+    </button>
+
+    <button class="feature f-todo" data-feature="To-do list" aria-haspopup="dialog">
+      <span class="count" aria-hidden="true" hidden></span>
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M18 16h64v54L66 86H18z" class="fill-butter" />
+        <path d="M82 70H66v16" class="fill-butter-dark" />
+        <path d="M28 32l5 5 9-10M28 52l5 5 9-10" class="line check" />
+        <path d="M50 34h22M50 54h22M30 72h22" class="line" />
+        <rect x="40" y="9" width="20" height="10" rx="2" class="fill-pink tape" />
+      </svg>
+      <span class="lbl">To-do</span>
+    </button>
+
+    <div class="calendar-wrap">
+      <div class="calendar" id="calendar" role="button" tabindex="0" aria-roledescription="flip calendar">
+        <div class="stack" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="sheets" id="sheets"></div>
+        <div class="rings" id="rings" aria-hidden="true"></div>
+        <!-- the turning page lives here: in front of the coils, or behind them once it passes over -->
+        <div class="flip-layer" id="flipLayer" aria-hidden="true"></div>
+      </div>
+
+      <nav class="controls" aria-label="Calendar navigation">
+        <button class="btn btn-prev" id="prev" aria-label="Previous day">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          <span>Back</span>
+        </button>
+        <button class="btn btn-today" id="today">Today</button>
+        <button class="btn btn-next" id="next" aria-label="Next day">
+          <span>Next</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+        </button>
+      </nav>
+      <p class="sr-only" aria-live="polite" id="announce"></p>
+    </div>
+
+    <button class="feature f-remind" data-feature="Reminders" aria-haspopup="dialog">
+      <span class="count" aria-hidden="true" hidden></span>
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M24 82l8-10M76 82l-8-10" class="line" />
+        <circle cx="50" cy="52" r="30" class="fill-pink" />
+        <circle cx="50" cy="52" r="22" class="fill-white" />
+        <path d="M50 38v14l9 6" class="line" />
+        <path d="M20 26a12 12 0 0 1 18-10zM80 26a12 12 0 0 0-18-10z" class="fill-butter" />
+        <circle cx="50" cy="52" r="2.5" class="dot" />
+      </svg>
+      <span class="lbl">Reminders</span>
+    </button>
+
+    <button class="feature f-notes" data-feature="Notes &amp; mood" aria-haspopup="dialog">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <rect x="16" y="16" width="56" height="72" rx="8" class="fill-mint" />
+        <path d="M44 60S30 52 30 44a6.5 6.5 0 0 1 14-2 6.5 6.5 0 0 1 14 2c0 8-14 16-14 16z" class="fill-pink" />
+        <path d="M26 16v72" class="line" />
+        <g transform="rotate(35 76 46)">
+          <rect x="70" y="16" width="12" height="52" rx="2" class="fill-butter" />
+          <path d="M70 68l6 12 6-12z" class="fill-peach" />
+          <rect x="70" y="10" width="12" height="8" rx="3" class="fill-pink" />
+        </g>
+      </svg>
+      <span class="lbl">Notes<span class="lbl-more"> &amp; mood</span></span>
+    </button>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <!-- a reminder ringing: slides down from the top (alarm.js) -->
+  <dialog class="alarm-card" id="alarmCard" aria-label="Reminder">
+    <svg class="bell alarm-ico" viewBox="0 0 24 24" aria-hidden="true"><path class="bell-ears" d="M4.2 8a3.2 3.2 0 0 1 4.3-4.4zM19.8 8a3.2 3.2 0 0 0-4.3-4.4z"/><path d="M7.6 20.2l1.3-1.7M16.4 20.2l-1.3-1.7"/><circle cx="12" cy="13" r="7"/><path d="M12 9.6V13l2.4 1.6"/></svg>
+    <div class="alarm-body">
+      <p class="alarm-text"></p>
+      <p class="alarm-when"></p>
+    </div>
+    <div class="alarm-actions">
+      <button type="button" class="alarm-more" hidden>+1 more</button>
+      <button type="button" class="btn alarm-snooze">Snooze 10 min</button>
+      <button type="button" class="btn btn-today alarm-done">Done</button>
+    </div>
+  </dialog>
+  <p class="sr-only" aria-live="assertive" id="alarmAnnounce"></p>
+
+  <!-- the day notepad: slides up when she taps a calendar page -->
+  <dialog class="notepad" id="notepad" aria-labelledby="np-title">
+    <div class="np-paper">
+      <div class="np-top">
+        <div class="np-band" aria-hidden="true"></div>
+        <header class="np-head">
+          <div>
+            <h2 id="np-title">Thursday</h2>
+            <p class="np-sub">12 November 2026</p>
+          </div>
+          <button type="button" class="np-close" aria-label="Close">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" /></svg>
+          </button>
+        </header>
+      </div>
+
+      <section class="np-section" aria-labelledby="np-plans-h">
+        <h3 id="np-plans-h">Plans</h3>
+        <ul class="np-list np-plans"></ul>
+        <button type="button" class="np-add np-add-plan">+ Add a plan</button>
+        <!-- the plan form (planform.js) goes here -->
+      </section>
+
+      <section class="np-section" aria-labelledby="np-todos-h">
+        <h3 id="np-todos-h">To-do</h3>
+        <ul class="np-list np-todos"></ul>
+        <form class="todo-form">
+          <input class="field" name="todo" maxlength="120" autocomplete="off" placeholder="Add a to-do…" aria-label="New to-do" enterkeyhint="done" />
+          <button type="submit" class="btn btn-today">Add</button>
+        </form>
+      </section>
+
+      <section class="np-section np-diary" aria-labelledby="np-diary-h">
+        <h3 id="np-diary-h">How was the day?</h3>
+        <div class="np-entry"></div>
+      </section>
+    </div>
+  </dialog>
+
+  <!-- "My week": things that happen every week (opened by the Schedule icon) -->
+  <dialog class="notepad schedule" id="schedule" aria-labelledby="wk-title">
+    <div class="np-paper">
+      <div class="np-top">
+        <div class="np-band" aria-hidden="true"></div>
+        <header class="np-head">
+          <div>
+            <h2 id="wk-title">My week</h2>
+            <p class="np-sub">Things that happen every week</p>
+          </div>
+          <button type="button" class="np-close" aria-label="Close">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" /></svg>
+          </button>
+        </header>
+      </div>
+      <div class="wk-view">
+        <p class="wk-intro">Add classes, gym, shifts… anything that repeats. It gets written on every matching calendar page for you.</p>
+        <div class="week"></div>
+      </div>
+      <div class="wk-form" hidden>
+        <h3 class="wk-form-title">Add</h3>
+        <!-- the plan form (planform.js) goes here -->
+      </div>
+    </div>
+  </dialog>
+
+  <!-- the to-do panel (opened by the To-do sticky note) -->
+  <dialog class="notepad todo-pad" id="todos" aria-labelledby="td-title">
+    <div class="np-paper">
+      <div class="np-top">
+        <div class="np-band" aria-hidden="true"></div>
+        <header class="np-head">
+          <div>
+            <h2 id="td-title">To-do</h2>
+            <p class="np-sub">A fresh page</p>
+          </div>
+          <button type="button" class="np-close" aria-label="Close">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" /></svg>
+          </button>
+        </header>
+      </div>
+
+      <form class="td-add">
+        <div class="todo-form">
+          <input class="field" name="text" maxlength="120" autocomplete="off" placeholder="Add a to-do…" aria-label="New to-do" enterkeyhint="done" />
+          <button type="submit" class="btn btn-today">Add</button>
+        </div>
+        <div class="td-when"></div>
+      </form>
+
+      <section class="np-section td-overdue" aria-labelledby="td-over-h" hidden>
+        <div class="td-sec-head">
+          <h3 id="td-over-h">Left from before</h3>
+          <button type="button" class="td-move-all">Move all to today</button>
+        </div>
+        <ul class="np-list"></ul>
+      </section>
+      <section class="np-section td-today" aria-labelledby="td-today-h">
+        <h3 id="td-today-h">Today</h3>
+        <ul class="np-list"></ul>
+      </section>
+      <section class="np-section td-upcoming" aria-labelledby="td-up-h" hidden>
+        <h3 id="td-up-h">Coming up</h3>
+        <ul class="np-list"></ul>
+      </section>
+      <section class="np-section td-someday" aria-labelledby="td-some-h" hidden>
+        <h3 id="td-some-h">Someday</h3>
+        <ul class="np-list"></ul>
+      </section>
+    </div>
+  </dialog>
+
+  <!-- the diary (opened by the Notes & mood icon) -->
+  <dialog class="notepad diary" id="diary" aria-labelledby="dy-title">
+    <div class="np-paper">
+      <div class="np-top">
+        <div class="np-band" aria-hidden="true"></div>
+        <header class="np-head">
+          <div>
+            <h2 id="dy-title">Diary</h2>
+            <p class="np-sub">Notes &amp; moods</p>
+          </div>
+          <button type="button" class="np-close" aria-label="Close">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" /></svg>
+          </button>
+        </header>
+      </div>
+
+      <section class="np-section" aria-labelledby="dy-today-h">
+        <h3 class="dy-today-h" id="dy-today-h">How's today?</h3>
+        <div class="dy-editor"></div>
+      </section>
+
+      <section class="np-section" aria-labelledby="dy-month-h">
+        <div class="dy-month-head">
+          <button type="button" class="dy-arrow dy-prev" aria-label="Previous month">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+          </button>
+          <h3 class="dy-month-title" id="dy-month-h">November 2026</h3>
+          <button type="button" class="dy-arrow dy-next" aria-label="Next month">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+          </button>
+        </div>
+        <div class="dy-grid"></div>
+        <div class="dy-summary"></div>
+      </section>
+
+      <section class="np-section" aria-labelledby="dy-past-h">
+        <h3 id="dy-past-h">Past entries</h3>
+        <ul class="np-list dy-list"></ul>
+        <button type="button" class="np-add dy-more" hidden>Show more</button>
+      </section>
+    </div>
+  </dialog>
+
+  <!-- the reminders panel (opened by the alarm clock) -->
+  <dialog class="notepad remind-pad" id="reminders" aria-labelledby="rm-title">
+    <div class="np-paper">
+      <div class="np-top">
+        <div class="np-band" aria-hidden="true"></div>
+        <header class="np-head">
+          <div>
+            <h2 id="rm-title">Reminders</h2>
+            <p class="np-sub">Nothing coming up</p>
+          </div>
+          <button type="button" class="np-close" aria-label="Close">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" /></svg>
+          </button>
+        </header>
+      </div>
+
+      <form class="rm-add">
+        <input class="field" name="text" maxlength="120" autocomplete="off" placeholder="Remind me to…" aria-label="Remind me to" enterkeyhint="done" />
+        <div class="rm-quick" role="group" aria-label="Quick times">
+          <button type="button" data-quick="hour">In 1 hour</button>
+          <button type="button" data-quick="evening">This evening</button>
+          <button type="button" data-quick="morning">Tomorrow 9am</button>
+        </div>
+        <div class="time-row">
+          <label>Day <input class="field" type="date" name="date" /></label>
+          <label>Time <input class="field" type="time" name="time" /></label>
+        </div>
+        <div class="when" role="radiogroup" aria-label="Repeat">
+          <label class="when-chip"><input type="radio" name="repeat" value="once" checked><span>Once</span></label>
+          <label class="when-chip"><input type="radio" name="repeat" value="daily"><span>Every day</span></label>
+          <label class="when-chip"><input type="radio" name="repeat" value="weekly"><span>Every week</span></label>
+        </div>
+        <button type="submit" class="btn btn-next rm-set">Set reminder</button>
+      </form>
+
+      <section class="np-section rm-ringing" aria-labelledby="rm-ring-h" hidden>
+        <h3 id="rm-ring-h">Ringing now</h3>
+        <ul class="np-list"></ul>
+      </section>
+      <section class="np-section rm-upcoming" aria-labelledby="rm-up-h">
+        <h3 id="rm-up-h">Coming up</h3>
+        <ul class="np-list"></ul>
+      </section>
+
+      <label class="repeat-toggle rm-sound">
+        <input type="checkbox" /><span class="switch" aria-hidden="true"></span>Play a little chime
+      </label>
+    </div>
+  </dialog>
+
+  <!-- settings: home screen, backup, storage (the gear in the corner) -->
+  <dialog class="notepad settings-pad" id="settings" aria-labelledby="st-title">
+    <div class="np-paper">
+      <div class="np-top">
+        <div class="np-band" aria-hidden="true"></div>
+        <header class="np-head">
+          <div>
+            <h2 id="st-title">Settings</h2>
+            <p class="np-sub">Home screen &amp; backups</p>
+          </div>
+          <button type="button" class="np-close" aria-label="Close">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" /></svg>
+          </button>
+        </header>
+      </div>
+
+      <section class="np-section" aria-labelledby="st-home-h">
+        <h3 id="st-home-h">On the home screen</h3>
+        <p class="st-text st-installed" hidden>It's on your home screen ✓ It opens like an app and works without internet.</p>
+        <p class="st-text st-why">Add it to your home screen so it opens like an app, works without internet, and keeps your things safer.</p>
+        <button type="button" class="btn btn-next st-install-btn" hidden>Add to home screen</button>
+        <ol class="st-ios" hidden>
+          <li>In Safari, tap the <b>Share</b> button
+            <svg class="st-share" viewBox="0 0 24 24" aria-label="share icon"><path d="M12 3.5v11M8 7.2l4-3.7 4 3.7M7 10.5H5.5v9.5h13v-9.5H17"/></svg></li>
+          <li>Scroll down and tap <b>Add to Home Screen</b></li>
+          <li>Tap <b>Add</b></li>
+        </ol>
+        <p class="st-text st-other" hidden>Open this page on your phone, then use the browser menu (⋮ or Share) and choose <b>Add to Home Screen</b> or <b>Install</b>.</p>
+      </section>
+
+      <section class="np-section" aria-labelledby="st-backup-h">
+        <h3 id="st-backup-h">Backup</h3>
+        <p class="st-text">Everything is saved on this device. A backup file lets you move it to a new phone, or get it back if something goes wrong.</p>
+        <p class="st-last">No backup saved yet</p>
+        <div class="st-actions">
+          <button type="button" class="btn btn-today st-export">Save a backup</button>
+          <button type="button" class="btn st-import">Restore a backup</button>
+          <input type="file" class="st-file" accept="application/json,.json" hidden />
+        </div>
+        <div class="st-restore" hidden>
+          <p class="st-restore-what"></p>
+          <p class="st-restore-now"></p>
+          <div class="st-actions">
+            <button type="button" class="btn st-restore-no">Cancel</button>
+            <button type="button" class="btn btn-delete st-restore-yes">Replace with backup</button>
+          </div>
+        </div>
+        <p class="st-status" aria-live="polite"></p>
+      </section>
+
+      <section class="np-section" aria-labelledby="st-store-h">
+        <h3 id="st-store-h">Keeping it safe</h3>
+        <p class="st-text st-persist"></p>
+        <button type="button" class="btn st-persist-btn" hidden>Ask the browser to keep it</button>
+      </section>
+    </div>
+  </dialog>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

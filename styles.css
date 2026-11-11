@@ -1,0 +1,1261 @@
+/* fonts kept inside the app so they work offline (SIL Open Font License, see fonts/OFL-*.txt).
+   Fredoka is one variable file covering weights 500-700. */
+@font-face {
+  font-family: "Fredoka";
+  font-weight: 500 700;
+  font-display: swap;
+  src: url(fonts/fredoka-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Fredoka";
+  font-weight: 500 700;
+  font-display: swap;
+  src: url(fonts/fredoka-latin-ext.woff2) format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Gaegu";
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/gaegu-latin.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --paper: #fff7ec;
+  --dot: #f1dfc8;
+  --ink: #33293d;
+  --card: #fffdf9;
+  --card-back: #f6ecdd;
+  --pink: #ffb3c7;
+  --pink-deep: #ff8fab;
+  --mint: #b4e9d4;
+  --butter: #ffe08a;
+  --butter-dark: #f5c95a;
+  --lavender: #d3c3fb;
+  --peach: #ffc7a1;
+  --sky: #b7dbff;
+  --head: #ff9fb6;
+
+  --wobble: 22px 26px 20px 28px / 26px 20px 28px 22px;
+  --cal-w: min(340px, 76vw);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { margin: 0; }
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: "Fredoka", system-ui, sans-serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--dot) 1.6px, transparent 1.7px);
+  background-size: 26px 26px;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* clear the notch / home bar when it runs full-screen from the home screen */
+  padding:
+    max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(40px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* the settings gear in the top corner */
+.settings-btn {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 2;
+  display: grid; place-items: center;
+  width: 44px; height: 44px;
+  background: var(--card);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 2px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.settings-btn svg { width: 22px; height: 22px; fill: none; stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.settings-btn:active { transform: translate(2px, 3px); box-shadow: 0 0 0 var(--ink); transition-duration: 70ms; }
+.settings-btn:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 3px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- title ---------- */
+.title { text-align: center; margin-bottom: 8px; }
+.title h1 {
+  margin: 0;
+  font-family: "Gaegu", "Fredoka", cursive;
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: 0.5px;
+  transform: rotate(-2deg);
+}
+.squiggle { width: 200px; height: 16px; display: block; margin: 2px auto 0; }
+.squiggle path { fill: none; stroke: var(--pink-deep); stroke-width: 4; stroke-linecap: round; }
+
+/* ---------- background doodles ---------- */
+.doodles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.dd { position: absolute; width: 38px; height: 38px; fill: none; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0.75; }
+.dd-1 { top: 9%;  left: 7%;  stroke: var(--butter-dark); transform: rotate(-12deg); }
+.dd-2 { top: 16%; right: 9%; stroke: var(--pink-deep); }
+.dd-3 { bottom: 14%; left: 10%; stroke: var(--lavender); width: 30px; }
+.dd-4 { bottom: 8%; right: 12%; width: 70px; stroke: var(--mint); }
+.dd-5 { top: 55%; left: 3%; stroke: var(--pink); width: 26px; transform: rotate(14deg); }
+.dd-6 { top: 62%; right: 4%; stroke: var(--sky); width: 30px; }
+.dd-7 { top: 34%; left: 22%; stroke: var(--peach); width: 22px; }
+
+/* ---------- layout ---------- */
+.desk {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: clamp(24px, 6vw, 90px);
+  row-gap: 40px;
+  width: 100%;
+  max-width: 980px;
+  margin-top: 18px;
+}
+.calendar-wrap { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; align-items: center; }
+.f-classes { grid-column: 1; grid-row: 1; justify-self: end; }
+.f-todo    { grid-column: 1; grid-row: 2; justify-self: start; }
+.f-remind  { grid-column: 3; grid-row: 1; justify-self: start; }
+.f-notes   { grid-column: 3; grid-row: 2; justify-self: end; }
+
+/* ---------- feature icons ---------- */
+.feature {
+  --tilt: -6deg;
+  appearance: none; border: 0; background: none; cursor: pointer;
+  font: inherit; color: inherit;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 6px;
+  border-radius: 18px;
+  transform: rotate(var(--tilt));
+  /* one gentle entrance on load, staggered; no perpetual motion */
+  /* short: she opens the app many times a day (all four in by ~380ms) */
+  animation: pop-in 260ms var(--ease-out) backwards;
+  animation-delay: calc(var(--i) * 40ms);
+}
+.f-classes { --i: 0; }
+.f-todo   { --tilt: 5deg;  --i: 1; }
+.f-remind { --tilt: 7deg;  --i: 2; }
+.f-notes  { --tilt: -4deg; --i: 3; }
+
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(10px) rotate(var(--tilt)) scale(0.96); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+/* playful overshoot on release / hover-out; the press itself is quick (below) */
+.feature { --icon: clamp(78px, 11vw, 112px); }
+.feature svg { width: var(--icon); height: auto; overflow: visible; transition: transform 250ms cubic-bezier(.3,1.6,.5,1); }
+.feature .lbl {
+  font-family: "Gaegu", cursive;
+  font-size: 1.45rem;
+  background: var(--card);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 0 12px 2px;
+  box-shadow: 3px 3px 0 var(--ink);
+  white-space: nowrap;
+}
+.feature:focus-visible svg { transform: scale(1.08) rotate(-4deg); }
+.feature:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+.feature:focus-visible .lbl { background: var(--butter); }
+
+.feature svg * { stroke: var(--ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.feature .line { fill: none; }
+.feature .fill-sky { fill: var(--sky); }
+.feature .fill-lav { fill: var(--lavender); }
+.feature .fill-butter { fill: var(--butter); }
+.feature .fill-butter-dark { fill: var(--butter-dark); }
+.feature .fill-pink { fill: var(--pink); }
+.feature .fill-mint { fill: var(--mint); }
+.feature .fill-peach { fill: var(--peach); }
+.feature .fill-white { fill: #fff; }
+.feature .dot { fill: var(--ink); }
+.feature .spiral circle { fill: var(--paper); }
+.feature .check { stroke: var(--pink-deep); }
+
+/* hover motion only for real mice: on touch, a tap would leave it stuck on */
+@media (hover: hover) and (pointer: fine) {
+  .feature:hover svg { transform: scale(1.08) rotate(-4deg); }
+  .curl:hover .flap-ear { fill: var(--butter); }
+  .btn:hover { background-color: var(--butter); }
+  .btn-next:hover { background-color: var(--pink-deep); }
+}
+
+/* press feedback: quick and firm, no overshoot under the finger */
+.feature:active svg {
+  transform: scale(0.95);
+  transition: transform 120ms var(--ease-out);
+}
+
+/* ---------- calendar ---------- */
+.calendar {
+  position: relative;
+  width: var(--cal-w);
+  aspect-ratio: 0.84;
+  margin-top: 34px;
+  touch-action: pan-x;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* thickness: pages stacked beneath */
+.stack span {
+  position: absolute; inset: 0;
+  border: 4px solid var(--ink);
+  border-radius: var(--wobble);
+  background: var(--card-back);
+}
+.stack span:nth-child(1) { transform: translate(5px, 7px); }
+.stack span:nth-child(2) { transform: translate(10px, 14px); }
+.stack span:nth-child(3) { transform: translate(15px, 21px); background: var(--ink); }
+
+.sheets { position: absolute; inset: 0; }
+
+/* the turning page: covers the coils (z 5) while it's in front of the calendar,
+   and goes below them once it has passed over the top and behind */
+.flip-layer {
+  position: absolute; inset: 0;
+  perspective: 1500px;
+  perspective-origin: 50% -30%;
+  pointer-events: none;
+  z-index: 6;
+}
+.flip-layer.behind { z-index: 4; }
+
+.sheet { position: absolute; inset: 0; }
+
+.face {
+  position: absolute; inset: 0;
+  border: 4px solid var(--ink);
+  border-radius: var(--wobble);
+  overflow: hidden;
+  background: var(--card);
+}
+
+/* ---------- peel pieces (built by script.js during a flip) ---------- */
+.flap {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  will-change: transform, clip-path;
+}
+.flap .back-paper {
+  display: none;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 27px, #ead9c2 27px 29px),
+    var(--card-back);
+}
+.flap.showback .front { display: none; }
+.flap.showback .back-paper { display: block; }
+.peel-svg {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.peel-svg .crease { stroke: var(--ink); stroke-width: 7; stroke-linecap: round; }
+
+.front { display: flex; flex-direction: column; }
+
+.sheet-head {
+  position: relative;
+  height: 30%;
+  background: var(--head);
+  border-bottom: 4px solid var(--ink);
+  display: flex; align-items: flex-end; justify-content: center; gap: 10px;
+  padding-bottom: 10px;
+}
+.holes { position: absolute; top: 0; left: 0; right: 0; height: 26px; }
+.holes i { /* hole centres sit 13px below the top edge (HOLE_Y in script.js) */
+  position: absolute; top: 7px; width: 12px; height: 12px; margin-left: -6px;
+  border-radius: 50%; background: var(--ink);
+}
+
+.month {
+  font-weight: 700;
+  font-size: clamp(1.7rem, 7.4vw, 2.3rem);
+  letter-spacing: 2px;
+  line-height: 1;
+  color: #fff;
+  /* 4 diagonal copies make the outline (cheaper to repaint during a peel) */
+  text-shadow:
+    2.5px 2.5px 0 var(--ink), -2.5px -2.5px 0 var(--ink),
+    2.5px -2.5px 0 var(--ink), -2.5px 2.5px 0 var(--ink),
+    4px 5px 0 var(--ink);
+}
+.year {
+  font-family: "Gaegu", cursive;
+  font-size: 1.3rem;
+  line-height: 1;
+  background: var(--card);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 0 8px 1px;
+  transform: rotate(6deg) translateY(-4px);
+}
+
+.sheet-body {
+  position: relative;
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding-bottom: 10px;
+}
+.date {
+  font-weight: 700;
+  font-size: calc(var(--cal-w) * 0.5);
+  line-height: 0.95;
+  letter-spacing: -2px;
+  color: var(--ink);
+  text-shadow: 6px 6px 0 var(--head);
+}
+.weekday {
+  font-family: "Gaegu", cursive;
+  font-size: calc(var(--cal-w) * 0.095);
+  line-height: 1;
+  margin-top: 4px;
+}
+.weekend .weekday { color: #d9466f; }
+
+.rel {
+  position: absolute; left: 16px; bottom: 14px;
+  font-family: "Gaegu", cursive; font-size: 1.15rem;
+  opacity: 0.72;
+  transform: rotate(-3deg);
+}
+.badge {
+  position: absolute; top: 12px; right: 12px;
+  font-family: "Gaegu", cursive; font-size: 1.15rem;
+  background: var(--butter);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 0 10px 1px;
+  transform: rotate(10deg);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* folded corner — click it to flip */
+.curl {
+  position: absolute; right: 0; bottom: 0;
+  width: 54px; height: 54px;
+  cursor: grab;
+  touch-action: none; /* her finger drags the corner, not the page */
+}
+.calendar.grabbing, .calendar.grabbing .curl { cursor: grabbing; }
+.curl svg { width: 100%; height: 100%; display: block; }
+.curl .under { fill: var(--card-back); }
+.curl .flap-ear { fill: #f3e7d6; stroke: var(--ink); stroke-width: 4; stroke-linejoin: round; transition: fill 150ms ease; }
+
+/* shade that falls on the revealed page during a flip */
+.shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(51,41,61,.35), rgba(51,41,61,.05));
+  opacity: 0;
+}
+
+/* spiral coils sit above the sheets: each loops out of its hole and over the top edge */
+.rings { position: absolute; top: -22px; left: 0; right: 0; height: 40px; pointer-events: none; z-index: 5; }
+.coil { position: absolute; top: 0; width: 26px; height: 40px; margin-left: -13px; overflow: visible; }
+.coil path { fill: none; stroke-linecap: round; }
+.coil .wire-ink { stroke: var(--ink); stroke-width: 6.5; }
+.coil .wire { stroke: #ece6f4; stroke-width: 2.6; }
+.coil .wire-shine { stroke: #fff; stroke-width: 1.6; }
+
+/* ---------- controls ---------- */
+.controls { display: flex; gap: 12px; margin-top: 44px; }
+.btn {
+  appearance: none;
+  font: 600 1.15rem "Fredoka", sans-serif;
+  color: var(--ink);
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 18px;
+  background: var(--card);
+  border: 3.5px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 0 5px 0 var(--ink);
+  cursor: pointer;
+  /* release: springs back up (160ms) */
+  transition:
+    transform 160ms var(--ease-out),
+    box-shadow 160ms var(--ease-out),
+    background-color 150ms ease;
+}
+.btn svg { width: 20px; height: 20px; fill: none; stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+/* press: snaps down onto its shadow (70ms) */
+.btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--ink);
+  transition-duration: 70ms, 70ms, 150ms;
+}
+.btn:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 4px; }
+.btn-next { background-color: var(--pink); }
+.btn-today { background-color: var(--mint); }
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 24px; z-index: 20;
+  font-family: "Gaegu", cursive; font-size: 1.35rem;
+  background: var(--card);
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 4px 4px 0 var(--ink);
+  padding: 6px 18px 8px;
+  transform: translate(-50%, calc(100% + 48px));
+  visibility: hidden;
+  /* leaving: quicker than arriving */
+  transition: transform 160ms var(--ease-out), visibility 0s linear 160ms;
+  pointer-events: none;
+  max-width: calc(100vw - 32px);
+}
+.toast.show {
+  transform: translate(-50%, 0);
+  visibility: visible;
+  transition: transform 250ms var(--ease-out), visibility 0s;
+}
+
+/* ---------- the day written on the page ---------- */
+.calendar { cursor: pointer; }
+.calendar:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 10px; border-radius: 26px; }
+
+.hint {
+  font-family: "Gaegu", cursive; font-size: 1.1rem;
+  opacity: 0.72; /* ≈4.6:1, readable */
+  margin-top: 6px;
+}
+
+/* busy day: smaller date, plans and to-dos on ruled lines underneath */
+.sheet-body.compact {
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 10px 16px 0;
+}
+.day-row { display: flex; align-items: center; gap: 12px; }
+.compact .date {
+  font-size: calc(var(--cal-w) * 0.27);
+  letter-spacing: -1px;
+  text-shadow: 4px 4px 0 var(--head);
+}
+.day-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-width: 0; }
+.compact .weekday { font-size: calc(var(--cal-w) * 0.08); margin: 0; }
+.compact .rel { position: static; transform: none; font-size: 1.05rem; }
+.compact .badge { position: static; transform: rotate(-4deg); font-size: 1rem; }
+
+.day-lines { list-style: none; margin: 6px 0 0; padding: 0; }
+.day-lines li {
+  display: flex; align-items: center; gap: 7px;
+  height: 27px;
+  border-bottom: 2px solid #efe3d1;
+  min-width: 0;
+}
+.day-lines li:last-child { padding-right: 40px; } /* clear of the dog-ear */
+.l-time { flex: none; font-weight: 600; font-size: 0.82rem; }
+.l-title {
+  font-family: "Gaegu", cursive; font-size: 1.22rem; line-height: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+}
+.l-box {
+  flex: none; display: grid; place-items: center;
+  width: 17px; height: 17px; margin: 0 2px;
+  border: 2.5px solid var(--ink); border-radius: 5px;
+  background: #fff;
+}
+.l-box svg { width: 13px; height: 13px; fill: none; stroke: var(--ink); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+.todo-line.done .l-box { background: var(--pink); }
+.todo-line.done .l-title { text-decoration: line-through 2px; opacity: 0.55; }
+.day-lines .more { font-family: "Gaegu", cursive; font-size: 1.1rem; opacity: 0.7; }
+
+/* plan-type stickers (page lines, notepad, picker) */
+.sticker { flex: none; width: 20px; height: 20px; overflow: visible; }
+.sticker circle { stroke: var(--ink); stroke-width: 1.6; }
+.sticker g * { stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- day notepad ---------- */
+.notepad {
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  width: min(560px, 100%);
+  max-width: 100%;
+  max-height: none;
+  margin: auto auto 0;          /* sits on the bottom edge */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  overflow: visible;
+  transform: translateY(105%);
+  transition: transform 220ms var(--ease-out);          /* closing: quick */
+}
+.notepad.open {
+  transform: none;
+  transition: transform 420ms var(--ease-drawer);        /* opening: slides and settles */
+}
+.notepad::backdrop {
+  background: rgb(51 41 61 / 0.38);
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out);
+}
+/* opened/closed with the keyboard: no slide, no fade */
+.notepad.instant, .notepad.instant::backdrop { transition: none !important; }
+/* being dragged down by her finger: follow it exactly */
+.notepad.dragging { transition: none; }
+/* the top strip is the drag handle */
+.np-top { touch-action: none; }
+@media (pointer: coarse) {
+  .np-band { position: relative; }
+  .np-band::after { /* a little grab bar so it looks draggable */
+    content: "";
+    position: absolute; top: 5px; left: 50%;
+    width: 42px; height: 5px;
+    background: rgb(51 41 61 / 0.4);
+    border-radius: 3px;
+    transform: translateX(-50%);
+  }
+}
+.notepad.open::backdrop { opacity: 1; }
+
+.np-paper {
+  max-height: min(86dvh, 760px);
+  overflow-y: auto;
+  overflow-x: clip; /* never scroll sideways */
+  overscroll-behavior: contain;
+  background:
+    repeating-linear-gradient(180deg, transparent 0 31px, #f3e8d8 31px 33px) 0 0 / 100% 33px,
+    var(--card);
+  border: 4px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 24px 24px 0 0;
+  padding: 0 20px calc(28px + env(safe-area-inset-bottom));
+}
+/* the coloured glue strip of a notepad, in this month's colour */
+.np-top {
+  position: sticky; top: 0; z-index: 2;
+  margin: 0 -20px;
+  padding: 0 20px 8px;
+  background: var(--card);
+  border-bottom: 2px dashed #eadcc6;
+}
+.np-band {
+  height: 18px;
+  margin: 0 -20px 10px;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.6) 50%, transparent 50%) 0 7px / 14px 3px repeat-x,
+    var(--head);
+  border-bottom: 3px solid var(--ink);
+}
+.np-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.np-head h2 {
+  margin: 0;
+  font-family: "Gaegu", cursive; font-size: 2.1rem; line-height: 1;
+}
+.np-sub { margin: 2px 0 0; font-weight: 500; opacity: 0.7; }
+.np-close {
+  flex: none;
+  display: grid; place-items: center;
+  width: 44px; height: 44px;
+  background: var(--butter);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 2px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.np-close svg { width: 20px; height: 20px; fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; }
+.np-close:active { transform: translate(2px, 3px); box-shadow: 0 0 0 var(--ink); transition-duration: 70ms; }
+.np-close:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 3px; }
+
+.np-section h3 { margin: 18px 0 10px; font-size: 1.15rem; font-weight: 700; letter-spacing: 0.3px; }
+.np-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.np-empty { font-family: "Gaegu", cursive; font-size: 1.25rem; opacity: 0.6; }
+
+/* a plan in the list: tap to edit */
+.plan-row {
+  width: 100%;
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 0 10px;
+  padding: 10px 12px;
+  text-align: left;
+  font: inherit; color: inherit;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out), background-color 150ms ease;
+}
+.plan-row .sticker { width: 30px; height: 30px; grid-row: span 2; }
+.plan-row:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); transition-duration: 70ms; }
+.plan-row:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 3px; }
+.plan-row.editing { background: var(--butter); }
+.pr-title { font-family: "Gaegu", cursive; font-size: 1.4rem; line-height: 1.1; overflow-wrap: anywhere; }
+.pr-meta { font-size: 0.88rem; opacity: 0.75; }
+
+.np-add {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  font: 600 1rem "Fredoka", sans-serif; color: var(--ink);
+  background: transparent;
+  border: 3px dashed var(--ink);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 160ms var(--ease-out);
+}
+.np-add:active { transform: scale(0.98); transition-duration: 70ms; }
+.np-add:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 3px; }
+
+/* the add / edit form */
+.plan-form {
+  display: grid; gap: 12px;
+  margin-top: 10px;
+  padding: 14px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.field {
+  width: 100%;
+  padding: 10px 12px;
+  font: 500 16px "Fredoka", sans-serif; /* 16px+ stops phones zooming in */
+  color: var(--ink);
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+}
+.field::placeholder { color: #8d8492; }
+.field:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+.type-pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; border: 0; }
+.type-chip { position: relative; }
+.type-chip input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.type-chip span {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 11px 4px 5px;
+  font-size: 0.92rem; font-weight: 500;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  transition: background-color 150ms ease, box-shadow 150ms ease, transform 160ms var(--ease-out);
+}
+.type-chip .sticker { width: 22px; height: 22px; }
+.type-chip input:checked + span { background: var(--chip); box-shadow: 2px 2px 0 var(--ink); }
+.type-chip input:active + span { transform: scale(0.96); transition-duration: 70ms; }
+.type-chip input:focus-visible + span { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+/* minmax(0, …) so date/time boxes can't push the form wider than the paper */
+.time-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.time-row .field { min-width: 0; }
+.time-row label { display: grid; gap: 4px; font-size: 0.88rem; font-weight: 600; }
+.form-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.form-actions .btn { padding: 8px 16px; font-size: 1rem; }
+.btn-delete { margin-right: auto; color: #b8325a; }
+
+/* to-dos */
+.todo { display: flex; align-items: center; gap: 2px; }
+.todo-check {
+  position: relative; flex: none;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; margin-left: -9px;
+  cursor: pointer;
+}
+.todo-check input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.box {
+  flex: none; display: grid; place-items: center;
+  width: 26px; height: 26px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  transition: background-color 150ms ease, transform 160ms var(--ease-out);
+}
+.box svg {
+  width: 17px; height: 17px;
+  fill: none; stroke: var(--ink); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round;
+  opacity: 0; transform: scale(0.6);
+  transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out);
+}
+.todo.done .box { background: var(--pink); }
+.todo.done .box svg { opacity: 1; transform: none; }
+.todo-check:active .box { transform: scale(0.9); transition-duration: 70ms; }
+.todo-check input:focus-visible + .box { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+/* the words: tap to edit */
+.txt {
+  flex: 1; min-width: 0;
+  display: grid; justify-items: start;
+  padding: 6px 6px;
+  text-align: left;
+  font-family: "Gaegu", cursive; font-size: 1.35rem; line-height: 1.2; color: inherit;
+  overflow-wrap: anywhere;
+  background: none; border: 0; border-radius: 10px;
+  cursor: text;
+  transition: background-color 150ms ease;
+}
+.txt:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 1px; }
+.todo-tag { font: 500 0.78rem "Fredoka", sans-serif; opacity: 0.7; }
+.txt span { /* hand-drawn strike-through that draws across when ticked */
+  background: linear-gradient(var(--ink), var(--ink)) no-repeat 0 58% / 0% 2.5px;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  transition: background-size 240ms var(--ease-out), opacity 240ms ease;
+}
+.todo.done .txt span { background-size: 100% 2.5px; opacity: 0.55; }
+.todo-del {
+  flex: none; display: grid; place-items: center;
+  width: 40px; height: 40px;
+  background: transparent; border: 0; border-radius: 50%;
+  opacity: 0.62; /* ≥3:1 so the ✕ is easy to see */
+  cursor: pointer;
+  transition: opacity 150ms ease, background-color 150ms ease;
+}
+.todo-del svg { width: 18px; height: 18px; fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linecap: round; }
+.todo-del:focus-visible { opacity: 1; outline: 3px dashed var(--pink-deep); outline-offset: 1px; }
+.todo-form { display: flex; gap: 8px; margin-top: 10px; }
+.todo-form .btn { flex: none; padding: 8px 16px; font-size: 1rem; }
+
+/* editing a to-do in place */
+.todo.editing { display: block; padding: 4px 0; }
+.todo-edit {
+  display: grid; gap: 10px;
+  padding: 12px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+/* when? today / tomorrow / someday / pick a day */
+.when { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.when-chip { position: relative; }
+.when-chip input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.when-chip span {
+  display: inline-block;
+  padding: 5px 12px;
+  font-size: 0.9rem; font-weight: 600;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  transition: background-color 150ms ease, box-shadow 150ms ease, transform 160ms var(--ease-out);
+}
+.when-chip input:checked + span { background: var(--butter); box-shadow: 2px 2px 0 var(--ink); }
+.when-chip input:active + span { transform: scale(0.96); transition-duration: 70ms; }
+.when-chip input:focus-visible + span { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+.when .when-date {
+  width: auto; min-width: 0;
+  padding: 4px 10px;
+  background: #fff;
+  border-radius: 999px;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+.when.has-date .when-date { background: var(--butter); box-shadow: 2px 2px 0 var(--ink); }
+
+/* ---------- to-do panel ---------- */
+.todo-pad { --head: #ffe08a; }
+.td-add { display: grid; gap: 10px; margin-top: 14px; }
+.td-add .todo-form { margin-top: 0; }
+.td-sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.td-move-all {
+  padding: 4px 2px;
+  font: 600 0.88rem "Fredoka", sans-serif; color: var(--ink);
+  text-decoration: underline 2px var(--pink-deep); text-underline-offset: 3px;
+  background: none; border: 0;
+  cursor: pointer;
+}
+.td-move-all:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; border-radius: 6px; }
+.td-overdue h3 { color: #b8325a; }
+
+/* ---------- mood faces ---------- */
+.mood-face { flex: none; width: 40px; height: 40px; overflow: visible; }
+.mood-face .skin { stroke: var(--ink); stroke-width: 2.5; }
+.mood-face path { fill: none; stroke: var(--ink); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+.mood-face .dot, .mood-face .mouth-fill { fill: var(--ink); }
+.mood-face .cheek { fill: #ff8fab; opacity: 0.55; }
+.mood-face .tear { fill: #9fcfff; stroke-width: 1.4; }
+
+/* stuck on the calendar page: top-left on a quiet day, top-right on a busy one */
+.page-stickers {
+  position: absolute; top: 10px; left: 12px;
+  display: flex; align-items: center; gap: 2px;
+  pointer-events: none;
+}
+.compact .page-stickers { left: auto; right: 12px; }
+.page-stickers .mood-face { width: 40px; height: 40px; transform: rotate(-8deg); }
+.note-ico { width: 24px; height: 24px; transform: rotate(7deg); }
+.note-ico path { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.note-ico .paper { fill: #fff; }
+
+/* ---------- mood + note editor ---------- */
+.entry { display: grid; gap: 10px; }
+.mood-pick { display: flex; justify-content: space-between; gap: 4px; }
+.mood-btn {
+  flex: 1; min-width: 0;
+  display: grid; justify-items: center; gap: 2px;
+  padding: 6px 2px 4px;
+  font: 600 0.8rem "Fredoka", sans-serif; color: var(--ink);
+  background: transparent;
+  border: 2.5px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 160ms var(--ease-out);
+}
+.mood-btn .mood-face { width: 44px; height: 44px; transition: transform 200ms var(--ease-out), opacity 150ms ease; }
+.mood-btn[aria-pressed="true"] { background: #fff; border-color: var(--ink); box-shadow: 2px 2px 0 var(--ink); }
+.mood-btn[aria-pressed="true"] .mood-face { transform: rotate(-8deg) scale(1.06); }
+/* once one is picked, the others step back */
+.mood-pick:has([aria-pressed="true"]) .mood-btn[aria-pressed="false"] .mood-face { opacity: 0.45; }
+.mood-btn:active { transform: scale(0.94); transition-duration: 70ms; }
+.mood-btn:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 1px; }
+.diary-note {
+  min-height: 140px;
+  resize: vertical;
+  padding: 6px 12px;
+  font-family: "Gaegu", cursive; font-size: 1.3rem; line-height: 33px;
+  /* ruled like diary paper, scrolling with the text */
+  background:
+    repeating-linear-gradient(180deg, transparent 0 31px, #efe3d1 31px 33px) 0 6px / 100% 33px local,
+    #fff;
+}
+.saved {
+  min-height: 1em;
+  margin: -4px 2px 0;
+  text-align: right; font-size: 0.82rem; font-weight: 600;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.saved.show { opacity: 0.72; }
+
+/* ---------- diary panel ---------- */
+.diary { --head: #b4e9d4; }
+.dy-month-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 18px 0 10px; }
+.dy-month-head h3 { margin: 0; }
+.dy-arrow {
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 2px 2px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.dy-arrow svg { width: 18px; height: 18px; fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.dy-arrow:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); transition-duration: 70ms; }
+.dy-arrow:disabled { opacity: 0.3; box-shadow: none; cursor: default; }
+.dy-arrow:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+.dy-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.dy-dow { padding-bottom: 2px; text-align: center; font-size: 0.78rem; font-weight: 600; opacity: 0.75; }
+.dy-day {
+  position: relative;
+  display: grid; place-items: center;
+  aspect-ratio: 1;
+  padding: 0;
+  font: 600 0.85rem "Fredoka", sans-serif; color: var(--ink);
+  background: #fff;
+  border: 2px solid #e6d8c3;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), border-color 150ms ease;
+}
+.dy-day .mood-face { width: 84%; height: 84%; }
+.dy-day.has-mood { background: transparent; border-color: transparent; }
+.dy-day.is-today { border: 2.5px solid var(--ink); }
+.dy-day.is-future { opacity: 0.35; cursor: default; }
+.dy-day:active:not(:disabled) { transform: scale(0.92); transition-duration: 70ms; }
+.dy-day:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 1px; }
+.dy-dot { position: absolute; bottom: 12%; width: 6px; height: 6px; background: var(--pink-deep); border-radius: 50%; }
+.dy-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 10px; font-weight: 600; }
+.dy-count { display: inline-flex; align-items: center; gap: 4px; }
+.dy-count .mood-face { width: 26px; height: 26px; }
+.dy-entry {
+  width: 100%;
+  display: grid; gap: 4px;
+  padding: 10px 12px;
+  text-align: left; font: inherit; color: inherit;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out), background-color 150ms ease;
+}
+.dy-entry:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); transition-duration: 70ms; }
+.dy-entry:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 3px; }
+.dy-entry-head { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+.dy-entry-head .mood-face { width: 28px; height: 28px; }
+.dy-text {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4;
+  overflow: hidden;
+  font-family: "Gaegu", cursive; font-size: 1.3rem; line-height: 1.25;
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+
+/* ---------- reminders ---------- */
+.bell { flex: none; width: 30px; height: 30px; overflow: visible; }
+.bell circle { fill: var(--pink); stroke: var(--ink); stroke-width: 1.8; }
+.bell path { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.bell .bell-ears { fill: var(--butter); }
+
+.remind-pad { --head: #ffb3c7; }
+.rm-add {
+  display: grid; gap: 10px;
+  margin-top: 14px;
+  padding: 14px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.rm-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+.rm-quick button {
+  padding: 5px 12px;
+  font: 600 0.88rem "Fredoka", sans-serif; color: var(--ink);
+  background: var(--paper);
+  border: 2.5px dashed var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 160ms var(--ease-out);
+}
+.rm-quick button:active { transform: scale(0.96); transition-duration: 70ms; }
+.rm-quick button:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+.rm-add .rm-set { justify-self: end; padding: 8px 18px; font-size: 1rem; }
+
+.rm-item { display: flex; align-items: center; gap: 6px; }
+.rm-item .bell { margin-left: 2px; }
+.rm-txt {
+  flex: 1; min-width: 0;
+  display: grid; justify-items: start;
+  padding: 6px;
+  text-align: left; font: inherit; color: inherit;
+  background: none; border: 0; border-radius: 10px;
+  cursor: text;
+  transition: background-color 150ms ease;
+}
+.rm-txt:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 1px; }
+.rm-text { font-family: "Gaegu", cursive; font-size: 1.35rem; line-height: 1.15; overflow-wrap: anywhere; }
+.rm-meta { font-size: 0.8rem; opacity: 0.75; }
+.rm-actions { flex: none; display: flex; gap: 6px; margin-left: auto; }
+.rm-actions .btn { padding: 6px 12px; font-size: 0.9rem; }
+.rm-ringing h3 { color: #b8325a; }
+.rm-ringing .rm-item {
+  flex-wrap: wrap;
+  padding: 6px 8px 8px;
+  background: #fff3f6;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.rm-item.editing { display: block; }
+.rm-edit {
+  display: grid; gap: 10px;
+  padding: 12px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.rm-sound { margin-top: 22px; }
+
+/* the card that slides down when a reminder rings */
+.alarm-card {
+  position: fixed;
+  inset: auto;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  z-index: 60;
+  width: min(440px, calc(100vw - 24px));
+  max-width: none; max-height: none;
+  margin: 0;
+  padding: 12px 14px;
+  grid-template-columns: auto 1fr; align-items: center; gap: 8px 12px;
+  overflow: visible;
+  color: var(--ink);
+  background: var(--card);
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 4px 5px 0 var(--ink);
+  transform: translate(-50%, calc(-100% - 40px));
+  transition: transform 200ms var(--ease-out);                     /* leaving: quick */
+}
+.alarm-card[open] { display: grid; } /* only when open: a closed dialog stays hidden */
+.alarm-card::backdrop { background: transparent; }
+.alarm-card.show {
+  transform: translate(-50%, 0);
+  transition: transform 380ms cubic-bezier(0.32, 0.72, 0, 1);      /* arriving: slides and settles */
+}
+.alarm-ico { width: 42px; height: 42px; }
+.alarm-card.show .alarm-ico { animation: ring 900ms ease-in-out 2; transform-origin: 50% 30%; }
+.alarm-body { min-width: 0; }
+.alarm-text { margin: 0; font-family: "Gaegu", cursive; font-size: 1.5rem; line-height: 1.1; overflow-wrap: anywhere; }
+.alarm-when { margin: 2px 0 0; font-size: 0.85rem; opacity: 0.75; }
+.alarm-actions { grid-column: 1 / -1; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.alarm-actions .btn { padding: 7px 14px; font-size: 0.95rem; }
+.alarm-more {
+  margin-right: auto;
+  padding: 4px 2px;
+  font: 600 0.88rem "Fredoka", sans-serif; color: var(--ink);
+  text-decoration: underline 2px var(--pink-deep); text-underline-offset: 3px;
+  background: none; border: 0;
+  cursor: pointer;
+}
+.alarm-more:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; border-radius: 6px; }
+
+/* the alarm clock on the desk wiggles when something starts ringing */
+.f-remind.ringing svg { animation: ring 900ms ease-in-out 2; transform-origin: 50% 35%; }
+@keyframes ring {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(-14deg); }
+  30% { transform: rotate(12deg); }
+  45% { transform: rotate(-10deg); }
+  60% { transform: rotate(8deg); }
+  75% { transform: rotate(-4deg); }
+}
+
+/* ---------- settings ---------- */
+.settings-pad { --head: #d3c3fb; }
+.st-text, .st-last, .st-status, .st-restore p { margin: 0 0 10px; line-height: 1.45; }
+.st-last { font-weight: 600; font-size: 0.92rem; opacity: 0.8; }
+.st-status:empty { display: none; }
+.st-status { margin-top: 10px; font-weight: 600; }
+.st-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.st-actions .btn { padding: 8px 16px; font-size: 1rem; }
+.st-actions .btn:disabled { opacity: 0.45; cursor: default; }
+.st-restore {
+  margin-top: 12px;
+  padding: 12px;
+  background: #fff3f6;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.st-restore .st-actions { justify-content: flex-end; }
+.st-restore .btn-delete { margin-right: 0; }
+.st-ios { margin: 0 0 10px; padding-left: 1.3em; line-height: 1.7; }
+.st-share { width: 20px; height: 20px; vertical-align: -4px; fill: none; stroke: #2f7de1; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.st-install-btn, .st-persist-btn { padding: 8px 16px; font-size: 1rem; }
+
+/* small text buttons get a full thumb-sized tap area on touch screens */
+@media (pointer: coarse) {
+  .td-move-all, .alarm-more { min-height: 44px; padding: 10px 6px; }
+}
+
+/* the count on the to-do sticky note */
+.feature { position: relative; }
+.count { /* pinned to the drawing's top-right corner, not the button's */
+  position: absolute; top: 0; left: calc(50% + var(--icon) / 2 - 22px); z-index: 1;
+  display: grid; place-items: center;
+  min-width: 28px; height: 28px; padding: 0 7px;
+  font: 700 0.9rem/1 "Fredoka", sans-serif; color: #fff;
+  background: var(--pink-deep);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+/* "just this day" / "every week" */
+.pf-scope {
+  display: flex; gap: 3px;
+  padding: 3px;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+}
+.seg { flex: 1; position: relative; }
+.seg input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.seg span {
+  display: block;
+  padding: 6px 10px;
+  text-align: center; font-size: 0.92rem; font-weight: 600;
+  border-radius: 999px;
+  transition: background-color 150ms ease;
+}
+.seg input:checked + span { background: var(--butter); box-shadow: inset 0 0 0 2.5px var(--ink); }
+.seg input:focus-visible + span { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+
+/* "happens every week" switch */
+.repeat-toggle { display: flex; align-items: center; gap: 10px; width: fit-content; font-weight: 600; cursor: pointer; }
+.repeat-toggle input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.switch {
+  position: relative; flex: none;
+  width: 46px; height: 28px;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  transition: background-color 150ms ease;
+}
+.switch::after {
+  content: "";
+  position: absolute; top: 3px; left: 3px;
+  width: 17px; height: 17px;
+  background: var(--ink);
+  border-radius: 50%;
+  transition: transform 200ms var(--ease-out);
+}
+.repeat-toggle input:checked + .switch { background: var(--mint); }
+.repeat-toggle input:checked + .switch::after { transform: translateX(18px); }
+.repeat-toggle input:focus-visible + .switch { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+
+.repeat-box {
+  display: grid; gap: 10px;
+  padding: 12px;
+  background: var(--paper);
+  border: 2px dashed #d9c8ae;
+  border-radius: 14px;
+}
+.pf-label { font-size: 0.88rem; font-weight: 600; margin-bottom: -4px; }
+.opt { font-weight: 400; opacity: 0.7; }
+/* seven circles on one row: they shrink a little on narrow phones */
+.dow-pick { display: flex; gap: 5px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.dow-chip { position: relative; flex: 1 1 0; max-width: 44px; min-width: 0; }
+.dow-chip input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+.dow-chip span {
+  display: grid; place-items: center;
+  width: 100%; aspect-ratio: 1;
+  font-size: 0.9rem; font-weight: 600;
+  background: #fff;
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+  transition: background-color 150ms ease, box-shadow 150ms ease, transform 160ms var(--ease-out);
+}
+.dow-chip input:checked + span { background: var(--pink); box-shadow: 2px 2px 0 var(--ink); }
+.dow-chip input:active + span { transform: scale(0.94); transition-duration: 70ms; }
+.dow-chip input:focus-visible + span { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+
+/* ---------- my week ---------- */
+.schedule { --head: #9fcfff; width: min(1040px, 100%); }
+.wk-intro { margin: 12px 0 0; font-size: 0.95rem; opacity: 0.75; }
+.week { display: grid; gap: 12px; margin-top: 14px; }
+.wk-day {
+  padding: 10px 12px 12px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+.wk-day h3 {
+  display: flex; align-items: center; gap: 8px;
+  margin: 0 0 8px;
+  font-family: "Gaegu", cursive; font-size: 1.5rem; line-height: 1;
+}
+.wk-day.is-today { background: #fffbe9; }
+.wk-day.is-today h3::after {
+  content: "today";
+  padding: 1px 8px;
+  font: 600 0.72rem "Fredoka", sans-serif;
+  background: var(--butter);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+.wk-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.wk-card {
+  width: 100%;
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px;
+  text-align: left; font: inherit; color: inherit;
+  background: color-mix(in srgb, var(--chip) 40%, white);
+  border: 2.5px solid var(--ink);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+}
+.wk-card .sticker { width: 24px; height: 24px; }
+.wk-card:active { transform: scale(0.98); transition-duration: 70ms; }
+.wk-card:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+.wk-text { display: grid; min-width: 0; }
+.wk-title { font-family: "Gaegu", cursive; font-size: 1.22rem; line-height: 1.1; overflow-wrap: anywhere; }
+.wk-meta { font-size: 0.78rem; opacity: 0.8; }
+.wk-add {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px;
+  font: 600 0.9rem "Fredoka", sans-serif; color: var(--ink);
+  background: transparent;
+  border: 2.5px dashed var(--ink);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 150ms ease, transform 160ms var(--ease-out);
+}
+.wk-add:active { transform: scale(0.98); transition-duration: 70ms; }
+.wk-add:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 2px; }
+.wk-form-title { margin: 16px 0 0; font-family: "Gaegu", cursive; font-size: 1.6rem; }
+.wk-form .plan-form { max-width: 560px; }
+@media (min-width: 900px) {
+  /* a real timetable: seven columns side by side */
+  .week { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; align-items: start; }
+  .wk-day { padding: 8px; }
+  .wk-day h3 { font-size: 1.3rem; flex-wrap: wrap; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wk-card:hover { box-shadow: 2px 2px 0 var(--ink); }
+  .txt:hover { background: rgb(255 224 138 / 0.4); }
+  .mood-btn:hover { background: rgb(255 255 255 / 0.7); }
+  .rm-txt:hover { background: rgb(255 224 138 / 0.4); }
+  .rm-quick button:hover { background: var(--butter); }
+  .alarm-more:hover { text-decoration-color: var(--ink); }
+  .settings-btn:hover { background: var(--butter); }
+  .dy-day:hover:not(:disabled):not(.has-mood) { border-color: var(--ink); }
+  .dy-entry:hover { background: #fffbe9; }
+  .td-move-all:hover { text-decoration-color: var(--ink); }
+  .wk-add:hover { background: var(--butter); }
+  .plan-row:hover { background: var(--butter); }
+  .np-add:hover { background: var(--butter); }
+  .todo-del:hover { opacity: 1; background: var(--pink); }
+}
+
+@media (min-width: 760px) {
+  /* on a big screen the notepad floats just above the bottom edge */
+  .notepad { margin-bottom: 24px; transform: translateY(calc(100% + 24px)); }
+  .notepad.open { transform: none; }
+  .np-paper { border-bottom: 4px solid var(--ink); border-radius: 24px; box-shadow: 6px 7px 0 var(--ink); }
+}
+
+/* ---------- small screens ---------- */
+@media (max-width: 760px) {
+  .desk {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 28px;
+    column-gap: 4px;
+  }
+  .calendar-wrap { grid-column: 1 / -1; grid-row: 1; }
+  .feature { grid-row: 2; justify-self: center !important; padding: 2px; }
+  .f-classes { grid-column: 1; }
+  .f-todo    { grid-column: 2; }
+  .f-remind  { grid-column: 3; }
+  .f-notes   { grid-column: 4; }
+  .feature { --icon: 62px; }
+  .feature .lbl { font-size: 1.05rem; padding: 0 8px 1px; border-width: 2.5px; }
+  .lbl-more { display: none; } /* "Notes & mood" → "Notes" on phones */
+  .controls { margin-top: 38px; gap: 8px; }
+  .btn { padding: 9px 14px; font-size: 1.05rem; }
+  .dd-3, .dd-5, .dd-6, .dd-7 { display: none; }
+}
+
+/* reduced motion: keep fades, drop movement */
+@media (prefers-reduced-motion: reduce) {
+  .feature { animation-name: fade-in; }
+  .feature:hover svg, .feature:focus-visible svg, .feature:active svg { transform: none; }
+  .toast {
+    transform: translate(-50%, 0);
+    opacity: 0;
+    transition: opacity 160ms ease-out, visibility 0s linear 160ms;
+  }
+  .toast.show { opacity: 1; transition: opacity 200ms ease-out, visibility 0s; }
+  .alarm-card, .alarm-card.show { transform: translate(-50%, 0); }
+  .alarm-card { opacity: 0; transition: opacity 160ms ease-out; }
+  .alarm-card.show { opacity: 1; transition: opacity 200ms ease-out; }
+  .alarm-card.show .alarm-ico, .f-remind.ringing svg { animation: none; }
+  .notepad, .notepad.open { transform: none; }
+  .notepad { opacity: 0; transition: opacity 160ms ease-out; }
+  .notepad.open { opacity: 1; transition: opacity 200ms ease-out; }
+}
