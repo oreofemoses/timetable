@@ -79,8 +79,9 @@ const panelOpen = () => !!document.querySelector("dialog.notepad[open]");
   }
 
   // the day's plans and to-dos, as lines written on the page
-  const MAX_LINES = 4;
   function dayLines(d) {
+    // a smaller calendar (short phone screens) has room for one line fewer
+    const MAX_LINES = calendarEl.offsetWidth < 260 ? 3 : 4;
     const plans = store.plansOn(d).map((p) => `
       <li>${sticker(p.type)}${p.start ? `<span class="l-time">${formatTime(p.start)}</span>` : ""}<span class="l-title">${esc(p.title)}</span></li>`);
     const todos = store.todosOn(d).sort((a, b) => a.done - b.done).map((t) => `

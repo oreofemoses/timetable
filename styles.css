@@ -39,8 +39,17 @@
   --head: #ff9fb6;
 
   --wobble: 22px 26px 20px 28px / 26px 20px 28px 22px;
-  --cal-w: min(340px, 76vw);
+  /* The calendar is as big as fits BOTH the screen's width and the height you
+     can actually see, so the whole home screen shows without scrolling.
+     --chrome-h is everything on the home screen that isn't the calendar.
+     (svh = the visible height with the browser's bars showing.) */
+  --chrome-h: 296px;
+  --cal-w: clamp(220px, min(76vw, (100vh - var(--chrome-h)) * 0.84), 340px);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@supports (height: 100svh) {
+  :root { --cal-w: clamp(220px, min(76vw, (100svh - var(--chrome-h)) * 0.84), 340px); }
 }
 
 * { box-sizing: border-box; }
@@ -280,7 +289,7 @@ body {
   height: 30%;
   background: var(--head);
   border-bottom: 4px solid var(--ink);
-  display: flex; align-items: flex-end; justify-content: center; gap: 10px;
+  display: flex; align-items: flex-end; justify-content: center; gap: calc(var(--cal-w) * 0.025);
   padding-bottom: 10px;
 }
 .holes { position: absolute; top: 0; left: 0; right: 0; height: 26px; }
@@ -291,7 +300,7 @@ body {
 
 .month {
   font-weight: 700;
-  font-size: clamp(1.7rem, 7.4vw, 2.3rem);
+  font-size: calc(var(--cal-w) * 0.1); /* grows and shrinks with the page, so SEPTEMBER always fits */
   letter-spacing: 2px;
   line-height: 1;
   color: #fff;
@@ -303,7 +312,7 @@ body {
 }
 .year {
   font-family: "Gaegu", cursive;
-  font-size: 1.3rem;
+  font-size: calc(var(--cal-w) * 0.058); /* scales with the page, like the month */
   line-height: 1;
   background: var(--card);
   border: 3px solid var(--ink);
@@ -1233,12 +1242,25 @@ body {
   .f-todo    { grid-column: 2; }
   .f-remind  { grid-column: 3; }
   .f-notes   { grid-column: 4; }
-  .feature { --icon: 62px; }
-  .feature .lbl { font-size: 1.05rem; padding: 0 8px 1px; border-width: 2.5px; }
+  .feature { --icon: 50px; gap: 2px; }
+  .feature .lbl { font-size: 0.95rem; padding: 0 8px 1px; border-width: 2.5px; }
   .lbl-more { display: none; } /* "Notes & mood" → "Notes" on phones */
-  .controls { margin-top: 38px; gap: 8px; }
+  .controls { margin-top: 30px; gap: 8px; }
   .btn { padding: 9px 14px; font-size: 1.05rem; }
-  .dd-3, .dd-5, .dd-6, .dd-7 { display: none; }
+  .dd-2, .dd-3, .dd-4, .dd-5, .dd-6, .dd-7 { display: none; } /* keep doodles off the calendar and icons */
+
+  /* a tighter home screen, so it all fits between the browser's bars */
+  :root { --chrome-h: 280px; }
+  body {
+    padding:
+      max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+  .title { margin-bottom: 0; }
+  .title h1 { font-size: 1.9rem; }
+  .squiggle { width: 150px; height: 12px; margin-top: 0; }
+  .desk { margin-top: 4px; row-gap: 14px; }
+  .calendar { margin-top: 30px; }
 }
 
 /* reduced motion: keep fades, drop movement */
