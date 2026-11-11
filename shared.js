@@ -81,6 +81,14 @@ export function whenLabel(d) {
   return `${day}, ${time}`;
 }
 
+// "Vida" → "Vida's Timetable", "James" → "James' Timetable", "" → "My Timetable"
+// (index.html has a tiny copy of this so the right title shows before the app loads)
+export function appTitle(name) {
+  const n = (name || "").trim();
+  if (!n) return "My Timetable";
+  return `${n}${/s$/i.test(n) ? "'" : "'s"} Timetable`;
+}
+
 // the week as she reads it: Monday first
 export const WEEK = [1, 2, 3, 4, 5, 6, 0];
 const SHORT = (d) => DAYS[d].slice(0, 3);

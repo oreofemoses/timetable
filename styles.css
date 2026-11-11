@@ -101,7 +101,8 @@ body {
 }
 
 /* ---------- title ---------- */
-.title { text-align: center; margin-bottom: 8px; }
+/* centred, with room kept on both sides so it never runs under the gear */
+.title { text-align: center; margin-bottom: 8px; width: calc(100% - 128px); }
 .title h1 {
   margin: 0;
   font-family: "Gaegu", "Fredoka", cursive;
@@ -110,6 +111,17 @@ body {
   letter-spacing: 0.5px;
   transform: rotate(-2deg);
 }
+/* the title is a button (tap to change the name) that looks like plain heading text */
+.title-btn {
+  white-space: nowrap; /* one line; script.js shrinks it to fit a long name */
+  padding: 0 4px;
+  font: inherit; letter-spacing: inherit; color: inherit;
+  background: none; border: 0; border-radius: 10px;
+  cursor: pointer;
+  text-decoration: underline 2px transparent; text-underline-offset: 6px;
+  transition: text-decoration-color 150ms ease;
+}
+.title-btn:focus-visible { outline: 3px dashed var(--pink-deep); outline-offset: 4px; }
 .squiggle { width: 200px; height: 16px; display: block; margin: 2px auto 0; }
 .squiggle path { fill: none; stroke: var(--pink-deep); stroke-width: 4; stroke-linecap: round; }
 
@@ -1036,6 +1048,8 @@ body {
 .st-status:empty { display: none; }
 .st-status { margin-top: 10px; font-weight: 600; }
 .st-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.st-name-form { display: flex; gap: 8px; margin-bottom: 8px; }
+.st-name-form .btn { flex: none; padding: 8px 16px; font-size: 1rem; }
 .st-actions .btn { padding: 8px 16px; font-size: 1rem; }
 .st-actions .btn:disabled { opacity: 0.45; cursor: default; }
 .st-restore {
@@ -1212,6 +1226,7 @@ body {
   .rm-quick button:hover { background: var(--butter); }
   .alarm-more:hover { text-decoration-color: var(--ink); }
   .settings-btn:hover { background: var(--butter); }
+  .title-btn:hover { text-decoration-color: var(--pink); text-decoration-style: dashed; }
   .dy-day:hover:not(:disabled):not(.has-mood) { border-color: var(--ink); }
   .dy-entry:hover { background: #fffbe9; }
   .td-move-all:hover { text-decoration-color: var(--ink); }

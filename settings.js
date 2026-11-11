@@ -1,7 +1,7 @@
 // Settings (the little gear): put the app on the home screen, save and
 // restore a backup file, and check the browser will keep her data.
 // Also switches on offline support.
-import { MONTHS } from "./shared.js";
+import { MONTHS, appTitle } from "./shared.js";
 import * as store from "./store.js";
 import { lastBackup, setLastBackup } from "./prefs.js";
 import { openDrawer, wireDrawer, fromKeyboard } from "./drawer.js";
@@ -71,6 +71,29 @@ q(".st-persist-btn").addEventListener("click", async () => {
   renderStorage();
 });
 
+// ---------- her name ----------
+const nameForm = q(".st-name-form");
+const nameInput = nameForm.elements.name;
+const namePreview = q(".st-name-preview");
+nameInput.maxLength = store.nameMax;
+
+function showNamePreview(saved = false) {
+  const title = appTitle(nameInput.value);
+  namePreview.textContent = saved ? `Saved ✓ The title now reads “${title}”.` : `The title will read “${title}”.`;
+}
+function saveName() {
+  const changed = nameInput.value.trim() !== store.getName();
+  store.setName(nameInput.value);
+  nameInput.value = store.getName();
+  if (changed) showNamePreview(true); // (Enter fires this twice: keep the "Saved" message)
+}
+nameInput.addEventListener("input", () => showNamePreview());
+nameInput.addEventListener("change", saveName); // also saves when she taps away
+nameForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  saveName();
+});
+
 // ---------- backup ----------
 const statusEl = q(".st-status");
 const restoreBox = q(".st-restore");
@@ -105,7 +128,7 @@ q(".st-export").addEventListener("click", async () => {
   try {
     // on phones, the share sheet lets her keep it in Files, Drive, email…
     if (phone && navigator.canShare?.({ files: [file] })) {
-      await navigator.share({ files: [file], title: "Vida's Timetable backup" });
+      await navigator.share({ files: [file], title: `${appTitle(store.getName())} backup` });
     } else {
       const url = URL.createObjectURL(blob);
       const a = Object.assign(document.createElement("a"), { href: url, download: name });
@@ -136,7 +159,7 @@ fileInput.addEventListener("change", async () => {
   if (!parsed) {
     pending = null;
     restoreBox.hidden = true;
-    statusEl.textContent = "That doesn't look like a Vida's Timetable backup.";
+    statusEl.textContent = "That doesn't look like a Timetable backup.";
     return;
   }
   pending = parsed;
@@ -167,18 +190,27 @@ q(".st-restore-no").addEventListener("click", () => {
 
 // ---------- open ----------
 function render() {
+  nameInput.value = store.getName();
+  showNamePreview();
   renderInstall();
   renderStorage();
   renderBackup();
 }
 
-export function openSettings({ instant = false } = {}) {
+// focus: "name" when she tapped the title to change it
+export function openSettings({ instant = false, focus = null } = {}) {
   pending = null;
   restoreBox.hidden = true;
   statusEl.textContent = "";
   render();
   openDrawer(dlg, { instant });
+  if (focus === "name") {
+    nameInput.focus();
+    nameInput.select();
+  }
 }
 
 document.querySelector(".settings-btn").addEventListener("click", (e) => openSettings({ instant: fromKeyboard(e) }));
+// something changed while Settings is open (e.g. she saved her name): refresh the backup bit
+store.subscribe(() => { if (dlg.open) renderBackup(); });
 wireDrawer(dlg);

@@ -6,7 +6,7 @@
 //
 // When you add a new file to the app, add it to SHELL and bump VERSION.
 
-const VERSION = "vida-v3";
+const VERSION = "vida-v4";
 const SHELL = [
   "./",
   "index.html",

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Vida's Timetable</title>
+  <title>My Timetable</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <!-- home screen: Android / Chrome read the manifest; iPhone reads the apple-* tags -->
   <link rel="manifest" href="manifest.webmanifest" />
@@ -35,7 +35,20 @@
   </button>
 
   <header class="title">
-    <h1>Vida's Timetable</h1>
+    <!-- the title is her name (set in Settings, or by tapping it) -->
+    <h1><button type="button" class="title-btn" id="appTitle" title="Tap to change the name">My Timetable</button></h1>
+    <script>
+      // show the saved name straight away, before the app's scripts load (no flash).
+      // Same rule as appTitle() in shared.js.
+      try {
+        var n = ((JSON.parse(localStorage.getItem("vida-timetable") || "{}").profile || {}).name || "").trim();
+        if (n) {
+          var t = n + (/s$/i.test(n) ? "'" : "'s") + " Timetable";
+          document.getElementById("appTitle").textContent = t;
+          document.title = t;
+        }
+      } catch (e) { /* first visit or private mode: "My Timetable" */ }
+    </script>
     <svg class="squiggle" viewBox="0 0 220 16" aria-hidden="true"><path d="M4 10c18-8 30 6 48 0s30-8 48 0 30 6 48 0 30-8 48 0 12 4 20 2" /></svg>
   </header>
 
@@ -350,6 +363,15 @@
           </button>
         </header>
       </div>
+
+      <section class="np-section" aria-labelledby="st-name-h">
+        <h3 id="st-name-h">Your name</h3>
+        <form class="st-name-form">
+          <input class="field" name="name" autocomplete="given-name" placeholder="Your name" aria-label="Your name" enterkeyhint="done" />
+          <button type="submit" class="btn btn-today">Save</button>
+        </form>
+        <p class="st-text st-name-preview"></p>
+      </section>
 
       <section class="np-section" aria-labelledby="st-home-h">
         <h3 id="st-home-h">On the home screen</h3>

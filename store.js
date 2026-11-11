@@ -1,8 +1,8 @@
-// Everything Vida writes is kept here, saved on her device (localStorage).
+// Everything she writes is kept here, saved on her device (localStorage).
 // Each record has an id and updatedAt so syncing between devices can be
 // added later without changing this shape.
 
-const KEY = "vida-timetable";
+const KEY = "vida-timetable"; // the storage key only; changing it would lose saved data
 const VERSION = 1;
 const listeners = new Set();
 
@@ -15,7 +15,11 @@ const pad = (n) => String(n).padStart(2, "0");
 // a calendar day as "2026-11-12" (her local date, not UTC)
 export const dateKey = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
-const empty = () => ({ version: VERSION, plans: [], todos: [], entries: [], reminders: [] });
+const NAME_MAX = 16; // a first name or nickname; longer won't fit the title on a phone
+// the owner's name, shown as "<name>'s Timetable" (empty = "My Timetable")
+const cleanProfile = (p) => ({ name: typeof p?.name === "string" ? p.name.trim().slice(0, NAME_MAX) : "" });
+
+const empty = () => ({ version: VERSION, profile: cleanProfile(null), plans: [], todos: [], entries: [], reminders: [] });
 const list = (x) => (Array.isArray(x) ? x : []);
 
 function load() {
@@ -24,9 +28,9 @@ function load() {
     if (!raw) return empty();
     const d = JSON.parse(raw);
     if (!d || d.version !== VERSION) return empty();
-    // entries (diary) and reminders arrived later; older saves simply don't have them yet
-    return { version: VERSION, plans: list(d.plans), todos: list(d.todos), entries: list(d.entries),
-      reminders: list(d.reminders) };
+    // profile, entries (diary) and reminders arrived later; older saves simply don't have them yet
+    return { version: VERSION, profile: cleanProfile(d.profile), plans: list(d.plans), todos: list(d.todos),
+      entries: list(d.entries), reminders: list(d.reminders) };
   } catch {
     return empty();
   }
@@ -49,6 +53,16 @@ window.addEventListener("storage", (e) => {
   data = load();
   listeners.forEach((fn) => fn());
 });
+
+// ---------- her name ----------
+export const nameMax = NAME_MAX;
+export const getName = () => data.profile.name;
+export function setName(name) {
+  const next = cleanProfile({ name });
+  if (next.name === data.profile.name) return;
+  data.profile = next;
+  commit();
+}
 
 export function subscribe(fn) {
   listeners.add(fn);
@@ -311,7 +325,7 @@ export function snoozeReminder(id, minutes) {
 
 // ---------- backup ----------
 export const hasData = () =>
-  data.plans.length + data.todos.length + data.entries.length + data.reminders.length > 0;
+  !!data.profile.name || data.plans.length + data.todos.length + data.entries.length + data.reminders.length > 0;
 export const counts = (d = data) =>
   ({ plans: d.plans.length, todos: d.todos.length, entries: d.entries.length, reminders: d.reminders.length });
 
@@ -338,13 +352,15 @@ export function readBackup(obj) {
   }
   clean.plans.forEach((p) => { p.repeat = p.repeat ? cleanRepeat(p.repeat) : null; p.skip = list(p.skip); });
   clean.entries.forEach((e) => { e.note = e.note ?? ""; });
+  // older backups have no name: keep whatever name this device already has
+  clean.profile = obj.profile ? cleanProfile(obj.profile) : null;
   return { data: clean, exportedAt: str(obj.exportedAt) ? obj.exportedAt : null };
 }
 
 // replace everything with a checked backup (keeping a safety copy of what was here)
 export function replaceAll(clean) {
   try { localStorage.setItem(`${KEY}-before-restore`, JSON.stringify(data)); } catch { /* no room: carry on */ }
-  data = clean;
+  data = { ...clean, profile: clean.profile || data.profile };
   commit();
 }
 

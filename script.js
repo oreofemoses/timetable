@@ -1,4 +1,4 @@
-import { MONTHS, DAYS, HEADS, sticker, formatTime, esc, CHECK_SVG, moodFace, NOTE_SVG } from "./shared.js";
+import { MONTHS, DAYS, HEADS, sticker, formatTime, esc, CHECK_SVG, moodFace, NOTE_SVG, appTitle } from "./shared.js";
 import * as store from "./store.js";
 import { openDay } from "./notepad.js";
 import { openSchedule } from "./schedule.js";
@@ -6,7 +6,7 @@ import { openTodos } from "./todos.js";
 import { openDiary } from "./diary.js";
 import { openReminders } from "./reminders.js";
 import "./alarm.js"; // starts listening for reminders that are due
-import "./settings.js"; // the gear: home screen, backup, offline support
+import { openSettings } from "./settings.js"; // the gear: name, home screen, backup, offline
 
 // is a panel (day notepad, my week) open? then the calendar ignores keys
 // (the ringing reminder card is a dialog too, but it shouldn't block the calendar)
@@ -417,7 +417,7 @@ const panelOpen = () => !!document.querySelector("dialog.notepad[open]");
     announce.textContent = name;
     calendarEl.setAttribute("aria-label", `${name}. Open to see and add plans`);
     const ringing = document.title.startsWith("⏰ ") ? "⏰ " : ""; // keep the alarm's marker
-    document.title = `${ringing}${MONTHS[d.getMonth()]} ${d.getDate()} · Vida's Timetable`;
+    document.title = `${ringing}${MONTHS[d.getMonth()]} ${d.getDate()} · ${appTitle(store.getName())}`;
   }
 
   // when she adds or ticks something, rewrite the page that's showing
@@ -439,6 +439,42 @@ const panelOpen = () => !!document.querySelector("dialog.notepad[open]");
   }
   store.subscribe(updateTodoCount);
   updateTodoCount();
+
+  // the title is her name ("My Timetable" until she sets one)
+  const titleBtn = document.getElementById("appTitle");
+  const titleH1 = titleBtn.closest("h1");
+  let titleName = null;
+  // a long name shrinks the title just enough to fit between the corners;
+  // an unusually wide one is shortened with "…" (screen readers still get it all)
+  function fitTitle() {
+    const name = store.getName();
+    const full = appTitle(name);
+    titleBtn.textContent = full;
+    titleBtn.removeAttribute("aria-label");
+    titleH1.style.fontSize = "";
+    const room = titleH1.parentElement.clientWidth;
+    let size = parseFloat(getComputedStyle(titleH1).fontSize);
+    while (titleBtn.scrollWidth > room && size > 15) {
+      size -= 1;
+      titleH1.style.fontSize = `${size}px`;
+    }
+    for (let k = name.length - 1; titleBtn.scrollWidth > room && k > 1; k--) {
+      titleBtn.textContent = appTitle(`${name.slice(0, k)}…`);
+      titleBtn.setAttribute("aria-label", full);
+    }
+  }
+  function updateTitle() {
+    const name = store.getName();
+    if (name === titleName) return;
+    titleName = name;
+    fitTitle();
+    say(shown);
+  }
+  store.subscribe(updateTitle);
+  updateTitle();
+  window.addEventListener("resize", fitTitle);
+  document.fonts?.ready.then(fitTitle); // measure again once the handwriting font has loaded
+  titleBtn.addEventListener("click", (e) => openSettings({ instant: viaKeyboard(e), focus: "name" }));
 
   // the diary asks to open a day: turn the calendar there and open its notepad
   document.addEventListener("vida:open-day", (e) => {
